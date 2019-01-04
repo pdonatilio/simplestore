@@ -8,9 +8,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.pdonatilio.simplestore.domain.Category;
+import com.pdonatilio.simplestore.domain.City;
 import com.pdonatilio.simplestore.domain.Product;
+import com.pdonatilio.simplestore.domain.State;
 import com.pdonatilio.simplestore.repositories.CategoryRepository;
+import com.pdonatilio.simplestore.repositories.CityRepository;
 import com.pdonatilio.simplestore.repositories.ProductRepository;
+import com.pdonatilio.simplestore.repositories.StateRepository;
 
 @SpringBootApplication
 public class SimplestoreApplication implements CommandLineRunner {
@@ -19,6 +23,10 @@ public class SimplestoreApplication implements CommandLineRunner {
 	private CategoryRepository categoryRepository;
 	@Autowired
 	private ProductRepository productRepository;
+	@Autowired
+	private StateRepository stateRepository;
+	@Autowired
+	private CityRepository cityRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(SimplestoreApplication.class, args);
@@ -43,6 +51,16 @@ public class SimplestoreApplication implements CommandLineRunner {
 		
 		categoryRepository.saveAll(Arrays.asList(cat1,cat2));
 		productRepository.saveAll(Arrays.asList(p1,p2,p3));
+		
+		State st1 = new State(null, "Minas Gerais");
+		State st2 = new State(null, "São Paulo");
+		
+		City c1 = new City(null, "Uberlandia", st1);
+		City c2 = new City(null, "São Paulo", st2);
+		City c3 = new City(null, "Campinas", st2);
+		
+		stateRepository.saveAll(Arrays.asList(st1,st2));
+		cityRepository.saveAll(Arrays.asList(c1,c2,c3));
 	}
 
 }
