@@ -7,12 +7,17 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.pdonatilio.simplestore.domain.Address;
 import com.pdonatilio.simplestore.domain.Category;
 import com.pdonatilio.simplestore.domain.City;
+import com.pdonatilio.simplestore.domain.Client;
 import com.pdonatilio.simplestore.domain.Product;
 import com.pdonatilio.simplestore.domain.State;
+import com.pdonatilio.simplestore.domain.enums.ClientType;
+import com.pdonatilio.simplestore.repositories.AddressRepository;
 import com.pdonatilio.simplestore.repositories.CategoryRepository;
 import com.pdonatilio.simplestore.repositories.CityRepository;
+import com.pdonatilio.simplestore.repositories.ClientRepository;
 import com.pdonatilio.simplestore.repositories.ProductRepository;
 import com.pdonatilio.simplestore.repositories.StateRepository;
 
@@ -27,6 +32,10 @@ public class SimplestoreApplication implements CommandLineRunner {
 	private StateRepository stateRepository;
 	@Autowired
 	private CityRepository cityRepository;
+	@Autowired
+	private ClientRepository clientRepository;
+	@Autowired
+	private AddressRepository addressRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(SimplestoreApplication.class, args);
@@ -61,6 +70,18 @@ public class SimplestoreApplication implements CommandLineRunner {
 		
 		stateRepository.saveAll(Arrays.asList(st1,st2));
 		cityRepository.saveAll(Arrays.asList(c1,c2,c3));
+		
+		Client cli1 = new Client(null, "Maria Silva", "maria@gmail.com", "36378912377", ClientType.INDIVIDUAL);
+		cli1.getPhoneNumbers().addAll(Arrays.asList("27363323","93838393"));
+		
+		Address a1 = new Address(null, "Rua Flores", "300", "Apto 203", "Jardim", "38220834", c1, cli1);
+		Address a2 = new Address(null, "Avenida Matos", "105", "Sala 800", "Centro", "38777012", c2, cli1);
+		
+		cli1.getAddresses().addAll(Arrays.asList(a1,a2));
+		
+		clientRepository.saveAll(Arrays.asList(cli1));
+		addressRepository.saveAll(Arrays.asList(a1,a2));
+
 	}
 
 }

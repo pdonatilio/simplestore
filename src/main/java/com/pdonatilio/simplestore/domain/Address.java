@@ -26,9 +26,9 @@ public class Address implements Serializable{
 	@JoinColumn(name="city_id")
 	private City city;
 	
-	//@ManyToOne
-	//@JoinColumn(name="client_id")
-	//private Client client;
+	@ManyToOne
+	@JoinColumn(name="client_id")
+	private Client client;
 
 	public Address() {
 	}
