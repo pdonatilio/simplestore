@@ -26,7 +26,7 @@ public class Client implements Serializable{
 	private String name;
 	private String email;
 	private String idCard;
-	private ClientType clientType;
+	private Integer clientType;
 	
 	@ElementCollection
 	@CollectionTable(name="PHONE_NUMBER")
@@ -44,7 +44,7 @@ public class Client implements Serializable{
 		this.name = name;
 		this.email = email;
 		this.idCard = idCard;
-		this.clientType = clientType;
+		this.clientType = clientType.getCod();
 	}
 
 	public Integer getId() {
@@ -80,11 +80,11 @@ public class Client implements Serializable{
 	}
 
 	public ClientType getClientType() {
-		return clientType;
+		return ClientType.toEnum(clientType);
 	}
 
 	public void setClientType(ClientType clientType) {
-		this.clientType = clientType;
+		this.clientType = clientType.getCod();
 	}
 
 	public Set<String> getPhoneNumbers() {
