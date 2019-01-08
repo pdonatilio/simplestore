@@ -1,5 +1,6 @@
 package com.pdonatilio.simplestore;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,16 +9,23 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.pdonatilio.simplestore.domain.Address;
+import com.pdonatilio.simplestore.domain.CardPayment;
 import com.pdonatilio.simplestore.domain.Category;
 import com.pdonatilio.simplestore.domain.City;
 import com.pdonatilio.simplestore.domain.Client;
+import com.pdonatilio.simplestore.domain.PurchaseOrder;
+import com.pdonatilio.simplestore.domain.Payment;
+import com.pdonatilio.simplestore.domain.PaymentSlip;
 import com.pdonatilio.simplestore.domain.Product;
 import com.pdonatilio.simplestore.domain.State;
 import com.pdonatilio.simplestore.domain.enums.ClientType;
+import com.pdonatilio.simplestore.domain.enums.PaymentState;
 import com.pdonatilio.simplestore.repositories.AddressRepository;
 import com.pdonatilio.simplestore.repositories.CategoryRepository;
 import com.pdonatilio.simplestore.repositories.CityRepository;
 import com.pdonatilio.simplestore.repositories.ClientRepository;
+import com.pdonatilio.simplestore.repositories.PurchaseOrderRepository;
+import com.pdonatilio.simplestore.repositories.PaymentRepository;
 import com.pdonatilio.simplestore.repositories.ProductRepository;
 import com.pdonatilio.simplestore.repositories.StateRepository;
 
@@ -36,6 +44,11 @@ public class SimplestoreApplication implements CommandLineRunner {
 	private ClientRepository clientRepository;
 	@Autowired
 	private AddressRepository addressRepository;
+	@Autowired
+	private PurchaseOrderRepository purchaseOrderRepository;
+	@Autowired
+	private PaymentRepository paymentRepository;
+	
 	
 	public static void main(String[] args) {
 		SpringApplication.run(SimplestoreApplication.class, args);
@@ -44,7 +57,7 @@ public class SimplestoreApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		
-		Category cat1 = new Category(null, "Informática");
+		Category cat1 = new Category(null, "Informática");ord
 		Category cat2 = new Category(null, "Escritório");
 		
 		Product p1 = new Product(null, "Computador", 2000.00);
@@ -82,6 +95,22 @@ public class SimplestoreApplication implements CommandLineRunner {
 		clientRepository.saveAll(Arrays.asList(cli1));
 		addressRepository.saveAll(Arrays.asList(a1,a2));
 
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		
+		PurchaseOrder pOrd1 = new PurchaseOrder(null, sdf.parse("30/09/2018 10:32"), cli1, a1);
+		PurchaseOrder pOrd2 = new PurchaseOrder(null, sdf.parse("10/10/2018 19:35"), cli1, a2);
+		
+		Payment pay1 = new CardPayment(null, PaymentState.LIQUIDATED, pOrd1, 6);
+		pOrd1.setPayment(pay1);
+		
+		Payment pay2 = new PaymentSlip(null, PaymentState.PENDING, pOrd2, sdf.parse("20/10/2018 00:00"), null);
+		pOrd2.setPayment(pay2);
+		
+		cli1.getOrders().addAll(Arrays.asList(pOrd1, pOrd2));
+		
+		purchaseOrderRepository.saveAll(Arrays.asList(pOrd1, pOrd2));
+		paymentRepository.saveAll(Arrays.asList(pay1, pay2));
+		
 	}
 
 }
