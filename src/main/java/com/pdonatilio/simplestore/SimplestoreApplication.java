@@ -57,7 +57,7 @@ public class SimplestoreApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		
-		Category cat1 = new Category(null, "Informática");ord
+		Category cat1 = new Category(null, "Informática");
 		Category cat2 = new Category(null, "Escritório");
 		
 		Product p1 = new Product(null, "Computador", 2000.00);
