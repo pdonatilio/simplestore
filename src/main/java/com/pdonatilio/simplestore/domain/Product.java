@@ -2,7 +2,9 @@ package com.pdonatilio.simplestore.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Product implements Serializable {
@@ -28,6 +31,9 @@ public class Product implements Serializable {
 		inverseJoinColumns = @JoinColumn(name = "category_id")
 	)
 	private List<Category> categories = new ArrayList<>();
+	
+	@OneToMany(mappedBy="id.product")
+	private Set<PurchaseOrderItem> items = new HashSet<>();
 
 	public Product() {
 	}
@@ -69,6 +75,14 @@ public class Product implements Serializable {
 
 	public void setCategories(List<Category> categories) {
 		this.categories = categories;
+	}
+
+	public Set<PurchaseOrderItem> getItems() {
+		return items;
+	}
+
+	public void setItems(Set<PurchaseOrderItem> items) {
+		this.items = items;
 	}
 
 	@Override

@@ -2,6 +2,8 @@ package com.pdonatilio.simplestore.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -10,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -21,7 +24,7 @@ public class PurchaseOrder implements Serializable{
 	private Integer id;
 	private Date moment;
 	
-	@OneToOne(cascade=CascadeType.ALL, mappedBy="order")
+	@OneToOne(cascade=CascadeType.ALL, mappedBy="purchaseOrder")
 	private Payment payment;
 	
 	@ManyToOne
@@ -31,6 +34,9 @@ public class PurchaseOrder implements Serializable{
 	@ManyToOne
 	@JoinColumn(name = "delivery_address_id")
 	private Address deliveryAddress;
+	
+	@OneToMany(mappedBy="id.purchaseOrder")
+	private Set<PurchaseOrderItem> items = new HashSet<>();
 	
 	public PurchaseOrder() {
 	}
@@ -81,6 +87,14 @@ public class PurchaseOrder implements Serializable{
 
 	public void setDeliveryAddress(Address deliveryAddress) {
 		this.deliveryAddress = deliveryAddress;
+	}
+	
+	public Set<PurchaseOrderItem> getItens() {
+		return items;
+	}
+
+	public void setItens(Set<PurchaseOrderItem> items) {
+		this.items = items;
 	}
 
 	@Override
